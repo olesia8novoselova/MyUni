@@ -1,0 +1,53 @@
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 28px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    max-width: 100%;
+    margin: auto;
+    position: relative;
+}
+
+.modalHeader {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.modalFooter button {
+    
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.closeButton {
+    display: flex;
+    gap: 8px;
+    border-radius: 100px;
+    border: 2px solid var(--Schemes-On-Error-Container, #410002);
+    padding: 10px 20px;
+}
+
+
+.cancelButton {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    background-color: #BA1A1A;
+    color: white;
+    border-color: #ff4d4d;
+    padding: 10px 20px;
+}
+
+  

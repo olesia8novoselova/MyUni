@@ -1,0 +1,57 @@
+.appointment {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 28px;
+    padding: 20px;
+    width: 360px;
+    height: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+  
+.info {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    gap: 15px;
+}
+
+
+.info h3{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.info span{
+    font-size: 11px;
+}
+
+.description {
+    margin-top: 10px;
+    max-height: 100px;
+    overflow-y: auto; 
+    word-wrap: break-word; 
+    white-space: pre-wrap; 
+    padding-right: 7px; 
+}
+
+.actions {
+    margin-top: 20px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    margin-top: auto;
+    background-color: #BA1A1A;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 100px;
+}
+
+  
