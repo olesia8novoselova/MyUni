@@ -3,11 +3,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Appointment {
   id: string;
-  date: string;
-  time: string;
-  specialist: string;
-  category: string;
-  description: string;
+  appointment_date: string;
+  start_time: string;
+  end_time: string;
+  appointmentType: string;
 }
 
 interface AppointmentState {
@@ -25,11 +24,14 @@ const appointmentSlice = createSlice({
     addAppointment: (state, action: PayloadAction<Appointment>) => {
       state.appointments.push(action.payload);
     },
+    setAppointments: (state, action: PayloadAction<Appointment[]>) => {
+      state.appointments = action.payload;
+    },
     removeAppointment: (state, action: PayloadAction<string>) => {
       state.appointments = state.appointments.filter(app => app.id !== action.payload);
     },
   },
 });
 
-export const { addAppointment, removeAppointment } = appointmentSlice.actions;
+export const { addAppointment, removeAppointment,setAppointments } = appointmentSlice.actions;
 export default appointmentSlice.reducer;

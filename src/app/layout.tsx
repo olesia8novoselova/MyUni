@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { store } from "@/store/store";
+import { store } from "../store/store";
 import { Provider } from "react-redux";
 
 const montserrat = Montserrat({ subsets: ["latin"] });

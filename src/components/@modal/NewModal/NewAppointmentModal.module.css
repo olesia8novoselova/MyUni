@@ -1,12 +1,11 @@
 .modalContent {
     background-color: white;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 28px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 600px;
+    width: 810px;
     max-width: 100%;
     margin: auto;
-    position: relative;
 }
 
 .modalHeader {
@@ -31,8 +30,27 @@
 
 .modalBody {
     display: flex;
-    flex-direction: column;
     gap: 15px;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    padding-right: 20px;
+    gap: 15px;
+}
+
+.calendarContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.datePickerWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modalFooter {
@@ -40,11 +58,11 @@
     justify-content: flex-end;
     gap: 10px;
     margin-top: 30px;
+    width: 100%;
 }
 
 .datePicker {
     width: 100%;
-    margin-top: 10px;
 }
 
 .react-datepicker {
@@ -63,12 +81,12 @@
 }
 
 .react-datepicker__day--selected {
-    background-color: #4caf50;
+    background-color: #40BA21;
     color: white;
 }
 
 .react-datepicker__day--keyboard-selected {
-    background-color: #4caf50;
+    background-color: #40BA21;
     color: white;
 }
 
@@ -77,7 +95,10 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-bottom: 20px;
 }
+
+
 
 .button {
     background-color: #40BA21;
@@ -85,5 +106,3 @@
     cursor: pointer;
     border-radius: 100px;
 }
-
-  

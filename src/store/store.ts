@@ -1,10 +1,12 @@
 // store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import appointmentReducer from './slices/appointmentSlice';
+import loginReducer from './slices/loginSlice';
 
 export const store = configureStore({
   reducer: {
     appointments: appointmentReducer,
+    login: loginReducer,
   },
 });
 

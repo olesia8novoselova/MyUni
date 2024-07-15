@@ -5,22 +5,20 @@ import styles from "./Card.module.css";
 
 interface AppointmentCardProps {
   id: string;
-  date: string;
-  time: string;
-  specialist: string;
-  category: string;
-  description: string;
+  appointment_date: string;
+  end_time: string;
+  start_time: string;
+  appointmentType: string;
   openCancelModal: (id: string) => void;
   formatDate: (dateString: string) => string;
 }
 
 const AppointmentCard = ({
   id,
-  date,
-  time,
-  specialist,
-  category,
-  description,
+  appointment_date,
+  end_time,
+  start_time,
+  appointmentType,
   openCancelModal,
   formatDate,
 }: AppointmentCardProps) => {
@@ -28,18 +26,18 @@ const AppointmentCard = ({
     <div className={styles.appointment}>
       <div className={styles.info}>
         <div>
-          <h3>{formatDate(date)}</h3>
-          <p>{time}</p>
+          <h3>{formatDate(appointment_date)}</h3>
+          <p>{start_time} - {end_time}</p>
         </div>
         <div>
-          <span>Specialist</span>
-          <p>{specialist}</p>
+          {/* <span>Specialist</span> */}
+          {/* <p>{specialist}</p> */}
         </div>
         <div>
           <span>Category</span>
-          <p>{category}</p>
+          <p>{appointmentType}</p>
         </div>
-        <div className={styles.description}>{description}</div>
+        {/* <div className={styles.description}>{description}</div> */}
       </div>
       <div className={styles.actions}>
         <div className={styles.buttons}>
