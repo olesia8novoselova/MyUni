@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addAppointment } from "@/store/slices/appointmentSlice";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
-import axios from "axios";
+import axiosInstance from "@/api/posts";
 import styles from "./NewAppointmentModal.module.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { message } from "antd";
@@ -45,29 +45,28 @@ const NewAppointmentModal = ({ closeModal, isOpen }: NewAppointmentModalProps) =
   useEffect(() => {
     const fetchSpecialists = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/user/get_admins', {
+        const response = await axiosInstance.get('user/get_admins', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
         if (response.status === 200) {
           setSpecialists(response.data);
-        }else if(response.status===401) {
-          message.error(response.data.message)
-          Cookies.remove("isAdmin")
-          Cookies.remove("token")
-          Cookies.remove("email")
-  
-          redirect('/login')
-        
         }
-      } catch (error) {
-        message.error(error.response.data.error)
+      } catch (error ) {
+        const err = error as { response: { data: { message: string }; status: number } };
+        message.error(err.response?.data?.message)
+        if(err?.response?.status===401) {
+         Cookies.remove("isAdmin")
+         Cookies.remove("token")
+         Cookies.remove("email")
+         redirect('/Login')
+       }
       }
     };
 
     fetchSpecialists();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     console.log(time)
@@ -78,7 +77,7 @@ const NewAppointmentModal = ({ closeModal, isOpen }: NewAppointmentModalProps) =
     const fetchTimeslots = async () => {
       if (specialist && date) {
         try {
-          const response = await axios.post('http://127.0.0.1:5000/appointment/get_appointments', {
+          const response = await axiosInstance.post('appointment/get_appointments', {
               specialist_email: specialists.filter((spe)=> specialist==spe.id)[0].email,
               appointment_date: date.toISOString().split("T")[0],  
           },{
@@ -89,18 +88,16 @@ const NewAppointmentModal = ({ closeModal, isOpen }: NewAppointmentModalProps) =
           if (response.status === 200) {
             console.log(response.data)
             setAvailableTimeslots(response.data);
-          }else if(response.status===401) {
-            message.error(response.data.message)
-            Cookies.remove("isAdmin")
-            Cookies.remove("token")
-            Cookies.remove("email")
-    
-            redirect('/login')
-          
           }
-        } catch (error) {
-        message.error(error.response.data.error)
-
+        } catch (error ) {
+          const err = error as { response: { data: { message: string }; status: number } };
+          message.error(err.response?.data?.message)
+          if(err?.response?.status===401) {
+           Cookies.remove("isAdmin")
+           Cookies.remove("token")
+           Cookies.remove("email")
+           redirect('/Login')
+         }
         }
       } else {
         setAvailableTimeslots([]);
@@ -108,13 +105,13 @@ const NewAppointmentModal = ({ closeModal, isOpen }: NewAppointmentModalProps) =
     };
 
     fetchTimeslots();
-  }, [specialist, date]);
+  }, [specialist, date,specialists,token]);
 
   const handleSubmit = async () => {
     if (date && specialist && time) {
       const appointmentId = time;
       try {
-        const response = await axios.post('http://127.0.0.1:5000/appointment/book', {
+        const response = await axiosInstance.post('appointment/book', {
           appointment_id: appointmentId,
           comment:description,
         },{
@@ -126,7 +123,7 @@ const NewAppointmentModal = ({ closeModal, isOpen }: NewAppointmentModalProps) =
         if (response.status === 201) {
           dispatch(
             addAppointment({
-              appointment_date: date,
+              appointment_date: date.toDateString(),
               id:appointmentId,
               start_time:availableTimeslots.filter((av)=> `${av.id}`=== time)[0].start_time,
               end_time:availableTimeslots.filter((av)=> `${av.id}`=== time)[0].start_time,
@@ -135,20 +132,19 @@ const NewAppointmentModal = ({ closeModal, isOpen }: NewAppointmentModalProps) =
           );
             message.success(response.data.success)
           closeModal();
-        }else if(response.status===401) {
-          message.error(response.data.message)
-          Cookies.remove("isAdmin")
-          Cookies.remove("token")
-          Cookies.remove("email")
-  
-          redirect('/login')
-        
         }
         else{
           message.error(response.data.error)
         }
-      } catch (error) {
-        message.error(error.response.data.error)
+      } catch (error ) {
+        const err = error as { response: { data: { message: string }; status: number } };
+        message.error(err.response?.data?.message)
+        if(err?.response?.status===401) {
+         Cookies.remove("isAdmin")
+         Cookies.remove("token")
+         Cookies.remove("email")
+         redirect('/Login')
+       }
       }
     }
   };

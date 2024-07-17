@@ -3,8 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Appointment {
   id: string,
-  appointment_date: Date;
-  specialist: string;
+  appointment_date: string ;
   start_time: string;
   appointmentType:string;
   end_time: string;

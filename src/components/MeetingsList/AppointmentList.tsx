@@ -10,10 +10,10 @@ import AppointmentCard from "../Card/Card";
 import NewAppointmentButton from "../NewButton/NewAppointmentButton";
 import EmailLogin from "../Email/EmailLogin";
 import styles from "./AppointmentList.module.css";
-import axios from "axios";
 import { message } from "antd";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
+import axiosInstance from "@/api/posts";
 const AppointmentList = () => {
   const appointments = useSelector(
     (state: RootState) => state.appointments.appointments
@@ -48,30 +48,30 @@ const AppointmentList = () => {
     const fetchAppointments = async () => {
       if (token && appointments.length === 0&& isAdmin==="false") {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/user/my_appointments', {
+          const response = await axiosInstance.get('user/my_appointments', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
           });
           if (response.status === 200) {
+            console.log(response)
             dispatch(setAppointments(response.data));
-          }else if(response.status===401) {
-            message.error(response.data.message)
-            Cookies.remove("isAdmin")
-            Cookies.remove("token")
-            Cookies.remove("email")
-    
-            redirect('/login')
-          
           }
-        } catch (error) {
-          message.error(error.response?.data.error);
+        } catch (error ) {
+          const err = error as { response: { data: { message: string }; status: number } };
+          message.error(err.response?.data?.message)
+          if(err?.response?.status===401) {
+           Cookies.remove("isAdmin")
+           Cookies.remove("token")
+           Cookies.remove("email")
+           redirect('/Login')
+         }
         }
       }
     };
 
     fetchAppointments();
-  }, [token, appointments.length, dispatch]);
+  }, [token, appointments.length, dispatch,isAdmin]);
 
   return (
     <div>

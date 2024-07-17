@@ -4,10 +4,10 @@ import { removeAppointment } from "@/app/admin/store/slices/appointmentSlice";
 import Modal from "react-modal";
 import styles from "./CancelAppointmentModal.module.css";
 import Image from "next/image";
-import axios from "axios";
 import { message } from "antd";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
+import axiosInstance from "@/api/posts";
 interface CancelAppointmentModalProps {
   appointmentId: string;
   closeModal: () => void;
@@ -23,7 +23,7 @@ const CancelAppointmentModal = ({
   const token = Cookies.get("token")
   const handleCancel = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/admin/delete_appointment', {
+      const response = await axiosInstance.post('admin/delete_appointment', {
         appointment_id: appointmentId,
       },{
         headers: {
@@ -35,20 +35,18 @@ const CancelAppointmentModal = ({
         dispatch(removeAppointment(appointmentId));
         closeModal();
         message.success(response.data.message)
-      }else if(response.status===401) {
-        message.error(response.data.message)
-        Cookies.remove("isAdmin")
-        Cookies.remove("token")
-        Cookies.remove("email")
-
-        redirect('/login')
-      
       }else{ 
         message.error(response.data.error)
-
       }
-    } catch (error) {
-      message.error(error.data.error)
+    } catch (error ) {
+      const err = error as { response: { data: { message: string }; status: number } };
+      message.error(err.response?.data?.message)
+      if(err?.response?.status===401) {
+       Cookies.remove("isAdmin")
+       Cookies.remove("token")
+       Cookies.remove("email")
+       redirect('/Login')
+     }
     }
 
   };

@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAdminId } from '@/app/admin/store/slices/adminSlice';
 import styles from './EmailLogin.module.css';
-import axiosInstance from '../../../../api/posts';
-
+import axiosInstance from '@/api/posts';
 const EmailLogin = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');

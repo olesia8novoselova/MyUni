@@ -2,7 +2,7 @@
 import { useDispatch } from "react-redux";
 import { removeAppointment } from "@/store/slices/appointmentSlice";
 import Modal from "react-modal";
-import axios from "axios";
+import axiosInstance from "@/api/posts";
 import styles from "./CancelAppointmentModal.module.css";
 import Image from "next/image";
 import Cookies from "js-cookie";
@@ -10,23 +10,12 @@ import { message } from "antd";
 import { redirect } from "next/navigation";
 interface CancelAppointmentModalProps {
   appointmentId: string;
-  appointment: {
-    id: Number;
-    name: string;
-    email: string;
-    appointmentType: string;
-    appointment_date: string;
-    end_time: string;
-    start_time: string;
-    user_id: null;
-  };
   closeModal: () => void;
   isOpen: boolean;
 }
 
 const CancelAppointmentModal = ({
   appointmentId,
-  appointment,
   closeModal,
   isOpen,
 }: CancelAppointmentModalProps) => {
@@ -34,7 +23,7 @@ const CancelAppointmentModal = ({
   const token = Cookies.get("token")
   const handleCancel = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/appointment/cancel_appointment', {
+      const response = await axiosInstance.post('appointment/cancel_appointment', {
         appointment_id: appointmentId,
       },{
         headers: {
@@ -48,23 +37,21 @@ const CancelAppointmentModal = ({
         closeModal();
         message.success(response.data.success)
 
-      }else if(response.status===401) {
-        message.error(response.data.message)
-        Cookies.remove("isAdmin")
-        Cookies.remove("token")
-        Cookies.remove("email")
-
-        redirect('/login')
-      
       }
       
       else{
         message.error(response.data.error)
 
       } 
-    } catch (error) {
-      message.error(error.data.error)
-
+    }catch (error ) {
+      const err = error as { response: { data: { message: string }; status: number } };
+      message.error(err.response?.data?.message)
+      if(err?.response?.status===401) {
+       Cookies.remove("isAdmin")
+       Cookies.remove("token")
+       Cookies.remove("email")
+       redirect('/Login')
+     }
     }
   };
 

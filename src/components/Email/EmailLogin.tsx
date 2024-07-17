@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import styles from './EmailLogin.module.css';
-import axios from 'axios';
-
+import axiosInstance from '@/api/posts';
 
 
 const EmailLogin = () => {
@@ -19,7 +18,7 @@ const EmailLogin = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/user/register', { email:email,name:email,password:"" });
+      const response = await axiosInstance.post('user/register', { email:email,name:email,password:"" });
       if (response.status === 201) {
         setSuccess('Email successfully submitted');
         setUserId(response.data.id);

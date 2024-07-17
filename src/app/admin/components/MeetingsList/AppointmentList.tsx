@@ -9,7 +9,7 @@ import AppointmentCard from "../Card/Card";
 import NewAppointmentButton from "../NewButton/NewAppointmentButton";
 import EmailLogin from "../Email/EmailLogin";
 import styles from "./AppointmentList.module.css";
-import axios from "axios";
+import axiosInstance from "@/api/posts";
 import Cookies from "js-cookie";
 import { message } from "antd";
 import { setAppointments } from "@/app/admin/store/slices/appointmentSlice";
@@ -41,30 +41,29 @@ const AppointmentList = () => {
     const fetchAppointments = async () => {
       if (token && appointments.length === 0&& isAdmin==="true") {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/admin/my_appointments', {
+          const response = await axiosInstance.get('admin/my_appointments', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
           });
           if (response.status === 200) {
             dispatch(setAppointments(response.data));
-          }else if(response.status===401) {
-            message.error(response.data.message)
-            Cookies.remove("isAdmin")
-            Cookies.remove("token")
-            Cookies.remove("email")
-    
-            redirect('/login')
-          
           }
-        } catch (error) {
-          message.error(error.response?.data.error);
+        } catch (error ) {
+          const err = error as { response: { data: { message: string }; status: number } };
+          message.error(err.response?.data?.message)
+          if(err?.response?.status===401) {
+           Cookies.remove("isAdmin")
+           Cookies.remove("token")
+           Cookies.remove("email")
+           redirect('/Login')
+         }
         }
       }
     };
 
     fetchAppointments();
-  }, [token, appointments.length, dispatch]);
+  }, [token, appointments.length, dispatch,isAdmin]);
 
 
   

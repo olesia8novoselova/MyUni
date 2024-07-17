@@ -2,7 +2,7 @@
 
 import CardAdmin from "./CardsAdmins/CardAdmin";
 
-const Psychologists = () => {
+const Psychologists: React.FC = () => {
   return (
     <div>
       <CardAdmin
@@ -18,3 +18,4 @@ const Psychologists = () => {
     </div>
   );
 };
+export default Psychologists;

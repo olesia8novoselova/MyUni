@@ -51,7 +51,7 @@ const NewAppointmentModal = ({
 
 
       try {
-        const response = await axiosInstance.post("http://127.0.0.1:5000/admin/add_appointment", {
+        const response = await axiosInstance.post("admin/add_appointment", {
           appointment_date: formatDate(date),
           start_time:formatTime(startTime),
           end_time:formatTime(endTime),
@@ -63,7 +63,7 @@ const NewAppointmentModal = ({
         });
         if (response.status === 200 ||response.status === 201 ) {
           const appointment = {
-            appointment_date: date,
+            appointment_date: date.toDateString(),
             id:response.data.appointment_id,
             start_time:startTime,
             end_time:endTime,
@@ -72,20 +72,18 @@ const NewAppointmentModal = ({
           dispatch(addAppointment(appointment));
           closeModal();
           message.success(response.data.success)
-        }else if(response.status===401) {
-          message.error(response.data.message)
-          Cookies.remove("isAdmin")
-          Cookies.remove("token")
-          Cookies.remove("email")
-  
-          redirect('/login')
-        
         } else {
           message.error(response.data.error)
-
         }
-      } catch (error) {
-        message.error(error.response.data.error)
+      } catch (error ) {
+        const err = error as { response: { data: { message: string }; status: number } };
+        message.error(err.response?.data?.message)
+        if(err?.response?.status===401) {
+         Cookies.remove("isAdmin")
+         Cookies.remove("token")
+         Cookies.remove("email")
+         redirect('/Login')
+       }
       }
     }
   };

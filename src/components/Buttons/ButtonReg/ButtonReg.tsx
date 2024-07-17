@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import styles from './ButtonReg.module.css';
-import axios from 'axios';
+import axiosInstance from '@/api/posts';
 import { message } from 'antd';
-import { useRouter } from 'next/navigation';
-
+import { redirect, useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 const ButtonReg: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -16,7 +16,7 @@ const ButtonReg: React.FC = () => {
     // Add your registration logic here
     if (name&&password&&email) {
       try {
-        const response = await axios.post('http://127.0.0.1:5000/user/register', {
+        const response = await axiosInstance.post('user/register', {
           name,
           email,
           password,
@@ -28,9 +28,15 @@ const ButtonReg: React.FC = () => {
         }else{ 
           message.error(response.data.error)
         }
-      } catch (error) {
-        message.error(error.response.data.error)
-  
+      } catch (error ) {
+        const err = error as { response: { data: { message: string }; status: number } };
+        message.error(err.response?.data?.message)
+        if(err?.response?.status===401) {
+         Cookies.remove("isAdmin")
+         Cookies.remove("token")
+         Cookies.remove("email")
+         redirect('/Login')
+       }
       }
     }
   };
